@@ -42,13 +42,34 @@ public class ObligSBinTre<T> implements Beholder<T>
     antall = 0;
     comp = c;
   }
-  
+
   @Override
   public boolean leggInn(T verdi)
   {
-    throw new UnsupportedOperationException("Ikke kodet ennå!");
-  }
-  
+
+    Node<T> p = rot;    // p starter i roten
+    Node<T> q = null;   // hjelpevariabel
+    int cmp = 0;        // hjelpevariabel
+
+    while (p != null)
+    {
+      q = p;                                // q er forelder til p
+      cmp = comp.compare(verdi,p.verdi);    // bruker komparatoren
+      p = cmp < 0 ? p.venstre : p.høyre;    // flytter p
+    }
+
+    p = new Node<>(verdi,q);  // q er forelder til ny node
+
+    if (q == null) rot = p;
+    else if (cmp < 0) q.venstre = p;
+    else q.høyre = p;
+
+    antall++;     // én verdi mer i treet
+    endringer++;  // innlegging er en endring
+
+    return true;  // vellykket innlegging
+    }
+
   @Override
   public boolean inneholder(T verdi)
   {
@@ -66,111 +87,127 @@ public class ObligSBinTre<T> implements Beholder<T>
 
     return false;
   }
-  
+
   @Override
   public boolean fjern(T verdi)
   {
     throw new UnsupportedOperationException("Ikke kodet ennå!");
   }
-  
+
   public int fjernAlle(T verdi)
   {
     throw new UnsupportedOperationException("Ikke kodet ennå!");
   }
-  
+
   @Override
   public int antall()
   {
     return antall;
   }
-  
+
   public int antall(T verdi)
   {
-    throw new UnsupportedOperationException("Ikke kodet ennå!");
+    if(verdi==null) return 0;
+    int a=0; // Oppstartsverdi
+
+    Node<T> p = rot;
+    while (p != null) {
+      int cmp = comp.compare(verdi,p.verdi);
+      if (cmp < 0) p = p.venstre;      // går til venstre
+      else if (cmp > 0) p = p.høyre;   // går til høyre
+      else {
+        a++;
+        p = p.høyre;
+      }
+
+    }
+
+    return a;
+
   }
-  
+
   @Override
   public boolean tom()
   {
     return antall == 0;
   }
-  
+
   @Override
   public void nullstill()
   {
     throw new UnsupportedOperationException("Ikke kodet ennå!");
   }
-  
+
   private static <T> Node<T> nesteInorden(Node<T> p)
   {
     throw new UnsupportedOperationException("Ikke kodet ennå!");
   }
-  
+
   @Override
   public String toString()
   {
     throw new UnsupportedOperationException("Ikke kodet ennå!");
   }
-  
+
   public String omvendtString()
   {
     throw new UnsupportedOperationException("Ikke kodet ennå!");
   }
-  
+
   public String høyreGren()
   {
     throw new UnsupportedOperationException("Ikke kodet ennå!");
   }
-  
+
   public String lengstGren()
   {
     throw new UnsupportedOperationException("Ikke kodet ennå!");
   }
-  
+
   public String[] grener()
   {
     throw new UnsupportedOperationException("Ikke kodet ennå!");
   }
-  
+
   public String bladnodeverdier()
   {
     throw new UnsupportedOperationException("Ikke kodet ennå!");
   }
-  
+
   public String postString()
   {
     throw new UnsupportedOperationException("Ikke kodet ennå!");
   }
-  
+
   @Override
   public Iterator<T> iterator()
   {
     return new BladnodeIterator();
   }
-  
+
   private class BladnodeIterator implements Iterator<T>
   {
     private Node<T> p = rot, q = null;
     private boolean removeOK = false;
     private int iteratorendringer = endringer;
-    
+
     private BladnodeIterator()  // konstruktør
     {
       throw new UnsupportedOperationException("Ikke kodet ennå!");
     }
-    
+
     @Override
     public boolean hasNext()
     {
       return p != null;  // Denne skal ikke endres!
     }
-    
+
     @Override
     public T next()
     {
       throw new UnsupportedOperationException("Ikke kodet ennå!");
     }
-    
+
     @Override
     public void remove()
     {
