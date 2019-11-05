@@ -70,165 +70,73 @@ public class ObligSBinTre<T> implements Beholder<T> {
                 return true;
         }
         return false;
-
     }
-
-
     @Override
-
     public int antall() {
-
         return antall;
-
     }
-
-
     @Override
-
     public boolean tom() {
-
         return antall == 0;
-
     }
-
-
     public int antall(T verdi) {
-
-
         Node<T> p = rot;
-
         int n = 0;
-
-
         while (p != null) {
-
             int cmp = comp.compare(verdi, p.verdi);
-
-
             if (cmp < 0) p = p.venstre;
-
             else if (cmp > 0) p = p.høyre;
-
             else {
-
                 p = p.høyre;
-
                 n++;
-
             }
-
         }
-
-
         return n;
-
     }
-
-
     //Oppgave 3
-
     private static boolean venstreTre = true;
-
-
     private static <T> Node<T> nesteInorden(Node<T> p) {
-
         // p.forelder er ulik null dersom p ikke er rot-noden.
-
         if (p.forelder != null || !venstreTre) {
-
-
             if (p.høyre != null)
-
                 p = p.høyre;
-
             else {
-
                 Node<T> q = p.forelder;
-
-
                 while (q != null && p == q.høyre) {
-
                     p = q;
-
                     q = q.forelder;
-
                 }
-
                 if (q != null) venstreTre = false;
-
                 else venstreTre = true;
-
-
                 return q;
-
             }
-
         } else if (p.venstre == null)    // Dersom rot-noden ikke har venstre barn, returnerer vi p og sjekker høyre subtre neste gang.
-
             venstreTre = false;
-
-
         while (p.venstre != null) p = p.venstre;
-
-
         return p;
-
     }
-
-
     @Override
-
     public String toString() {
-
         StringJoiner stringJoiner = new StringJoiner(", ", "[", "]");
-
-
         Node<T> p = null;
-
-
         //ObligSBinTre.venstreSubtre = true; // nesteInorden()
-
         if (rot != null) p = nesteInorden(rot);
-
-
         while (p != null) {
-
             stringJoiner.add(p.verdi.toString());
-
             p = nesteInorden(p);
-
         }
-
-
         return stringJoiner.toString();
-
     }
-
-
     //Oppgave 4
-
-
     public String omvendtString() {
-
         StringJoiner stringJoiner = new StringJoiner(", ", "[", "]");
-
         Deque<Node<T>> stakk = new ArrayDeque<>();
-
         Node<T> p = rot;
-
-
         if (tom()) return stringJoiner.toString();
-
-
         while (p.høyre != null) {
-
             stakk.push(p);
-
             p = p.høyre;
-
         }
-
-
         while (true) {
 
             stringJoiner.add(p.toString());
